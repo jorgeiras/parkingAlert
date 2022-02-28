@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">parkingAlert</string>
+    <string name="title_activity_all_parkings">AllParkingsActivity</string>
+    <string name="tab_text_1">Recientes</string>
+    <string name="tab_text_2">Popularidad</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

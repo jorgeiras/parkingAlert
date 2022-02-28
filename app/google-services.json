@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "813341150444",
+    "firebase_url": "https://padb-d4038-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "padb-d4038",
+    "storage_bucket": "padb-d4038.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:813341150444:android:d2e9e674e0f0b1f2f5a9c9",
+        "android_client_info": {
+          "package_name": "com.example.parkingalert"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "813341150444-ahtu0ff53g4pf6kqv2as802r69jrq2ej.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqM7OFi82XxgV5qouP6sNScpTGDPyRD3o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "813341150444-ahtu0ff53g4pf6kqv2as802r69jrq2ej.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
