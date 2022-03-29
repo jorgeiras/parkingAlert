@@ -1,12 +1,45 @@
 package com.example.parkingalert;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +47,18 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class RecentParkingsFragment extends Fragment {
+
+
+    private RecyclerView recyclerView;
+    ParkingSpaceAdapter parkingSpaceAdapter;
+    FirebaseFirestore db;
+    private double latitude;
+    private double longitude;
+    FusedLocationProviderClient fusedLoc;
+    List<ParkingSpace> parkingSpaceList;
+    parkAdapter parkAdapterObject;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,6 +104,130 @@ public class RecentParkingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_recent_parkings, container, false);
+
+        View v = inflater.inflate(R.layout.fragment_recent_parkings, container, false);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipeRefreshRecent);
+
+        /*
+        db = FirebaseFirestore.getInstance();
+        Query q = db.collection("Parkings").orderBy("timeStamp", Query.Direction.DESCENDING);
+        recyclerView = v.findViewById(R.id.recyclerRecent);
+
+
+        FirestoreRecyclerOptions<ParkingSpace> options = new FirestoreRecyclerOptions.Builder<ParkingSpace>().setQuery(q,ParkingSpace.class).build();
+        parkingSpaceAdapter = new ParkingSpaceAdapter(options,getContext());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(parkingSpaceAdapter);
+*/
+
+        db = FirebaseFirestore.getInstance();
+        recyclerView = v.findViewById(R.id.recyclerRecent);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        parkingSpaceList = new ArrayList<>();
+        parkAdapterObject = new parkAdapter(getActivity(), parkingSpaceList);
+        recyclerView.setAdapter(parkAdapterObject);
+
+        getDeviceLocation();
+        db.collection("Parkings").orderBy("timeStamp", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+
+                        ParkingSpace p = document.toObject(ParkingSpace.class);
+                        double lat = 0.0144927536231884;
+                        double lon = 0.0181818181818182;
+                        double distance = 2;
+                        double lowLat = latitude- (distance * lat);
+                        double highLat = latitude + (distance * lat);
+                        double lowLong = longitude - (distance * lon);
+                        double highLong = longitude + (distance * lon);
+
+                        if( p.getLatitude() > lowLat && p.getLatitude() < highLat && p.getLongitude() > lowLong && p.getLongitude() < highLong ){
+
+                            parkingSpaceList.add(p);
+                        }
+
+                    }
+                    parkAdapterObject.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getActivity(), "error" + task.getException(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                recyclerView.setAdapter(parkAdapterObject);
+                parkingSpaceList.clear();
+                db.collection("Parkings").orderBy("timeStamp", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+
+                                ParkingSpace p = document.toObject(ParkingSpace.class);
+                                double lat = 0.0144927536231884;
+                                double lon = 0.0181818181818182;
+                                double distance = 2;
+                                double lowLat = latitude- (distance * lat);
+                                double highLat = latitude + (distance * lat);
+                                double lowLong = longitude - (distance * lon);
+                                double highLong = longitude + (distance * lon);
+
+                                if( p.getLatitude() > lowLat && p.getLatitude() < highLat && p.getLongitude() > lowLong && p.getLongitude() < highLong ){
+
+                                    parkingSpaceList.add(p);
+                                }
+
+                            }
+                            parkAdapterObject.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(getActivity(), "error" + task.getException(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+
+        return v;
     }
+
+
+    private void getDeviceLocation() {
+
+        try {
+            fusedLoc = LocationServices.getFusedLocationProviderClient(getContext());
+            Task<Location> locationResult = fusedLoc.getLastLocation();
+            locationResult.addOnSuccessListener( new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    Location lastKnownLocation = location;
+                    if (lastKnownLocation != null) {
+
+                        latitude = lastKnownLocation.getLatitude();
+                        longitude = lastKnownLocation.getLongitude();
+
+                    }
+                }
+
+
+            });
+
+        } catch (SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage(), e);
+        }
+    }
+
+
+
+
+
+
+
 }
