@@ -11,11 +11,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,8 +36,8 @@ public class RegisterActivity extends AppCompatActivity {
     private String password;
 
     FirebaseAuth firebase;
-    DatabaseReference db;
-
+    //DatabaseReference db;
+    FirebaseFirestore db;
 
 
     @Override
@@ -51,12 +55,13 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         firebase = FirebaseAuth.getInstance();
-        db = FirebaseDatabase.getInstance().getReference();
+        //db = FirebaseDatabase.getInstance().getReference();
+        db = FirebaseFirestore.getInstance();
 
         Buttonregistrarse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                name = EditTextemail.getText().toString();
+                name = EditTextname.getText().toString();
                 email = EditTextemail.getText().toString();
                 password = EditTextpassword.getText().toString();
 
@@ -91,8 +96,21 @@ public class RegisterActivity extends AppCompatActivity {
                     Map<String,Object> UserDataRegister = new HashMap<>();
                     //UserDataRegister.put("UserID", User);
                     UserDataRegister.put("name", name);
+                    UserDataRegister.put("email", name);
 
-
+                    db.collection("users").add(UserDataRegister).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            startActivity(new Intent(RegisterActivity.this, AllParkingsActivity.class));
+                            finish();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(RegisterActivity.this, "Error al intentar conectar con la base de datos", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    /*
                     db.child("Users").child(User).setValue(UserDataRegister).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task2) {
@@ -104,7 +122,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 Toast.makeText(RegisterActivity.this, "Error al intentar conectar con la base de datos", Toast.LENGTH_LONG).show();
                             }
                         }
-                    });
+                    });*/
 
                 }
                 else{
