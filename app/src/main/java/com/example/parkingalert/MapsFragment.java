@@ -9,12 +9,15 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -24,18 +27,24 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+
+import java.util.concurrent.Executor;
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     GoogleMap map;
-    Location loc;
     FusedLocationProviderClient fusedLoc;
-
-
+    private static double latitude;
+    private static double longitude;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
     }
 
     /**
@@ -65,13 +74,22 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
 
 
-            MapsInitializer.initialize(getContext());
 
+            map = googleMap;
+
+            getDeviceLocation();
+
+            //MapsInitializer.initialize(getContext());
+
+            /*
             map = googleMap;
 
             googleMap.addMarker(new MarkerOptions().position(new LatLng(40.43214,-74.090709)).title("statuee").snippet("holaaa"));
             CameraPosition cam = CameraPosition.builder().target(new LatLng(40.43214,-74.090709)).zoom(16).bearing(0).tilt(45).build();
             googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cam));
+
+            */
+
         }
 
 
@@ -86,13 +104,59 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        fusedLoc = LocationServices.getFusedLocationProviderClient(getContext());
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 
+
         mapFragment.getMapAsync(this);
+
 
     }
 
+
+
+
+    private void getDeviceLocation() {
+        /*
+         * Get the best and most recent location of the device, which may be null in rare
+         * cases when a location is not available.
+         */
+        try {
+
+                Task<Location> locationResult = fusedLoc.getLastLocation();
+                locationResult.addOnSuccessListener( new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        Location lastKnownLocation = location;
+                        if (lastKnownLocation != null) {
+                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                    new LatLng(lastKnownLocation.getLatitude(),
+                                            lastKnownLocation.getLongitude()), 16.0f));
+                            map.addMarker(new MarkerOptions().position( new LatLng(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude())));
+                            latitude = lastKnownLocation.getLatitude();
+                            longitude = lastKnownLocation.getLongitude();
+
+                        }
+                    }
+
+
+                });
+
+        } catch (SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage(), e);
+        }
+    }
+
+
+    public static double getLong(){
+            return longitude;
+    }
+
+    public static double getLat(){
+        return latitude;
+    }
 /*
     private void getCurrentLocation(){
         locClient.getLastLocation().addOnCompleteListener(task->{

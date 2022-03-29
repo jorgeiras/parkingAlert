@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".AddParkingActivity">
 
-    <androidx.fragment.app.FragmentContainerView
+    <FrameLayout
         android:id="@+id/fragment_container_view"
         android:name="com.example.parkingalert.MapsFragment"
         android:layout_width="match_parent"
@@ -15,6 +15,7 @@
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <Button
+        android:id="@+id/ButtonAccept"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="154dp"
@@ -22,6 +23,20 @@
         android:layout_marginEnd="155dp"
         android:layout_marginBottom="48dp"
         android:text="Aceptar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_container_view" />
+    <Button
+        android:id="@+id/ButtonConfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="154dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="155dp"
+        android:layout_marginBottom="48dp"
+        android:text="confirmar"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
