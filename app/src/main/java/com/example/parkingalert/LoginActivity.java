@@ -33,7 +33,6 @@ public class LoginActivity extends AppCompatActivity {
     private String password;
 
     FirebaseAuth firebase;
-    DatabaseReference db;
 
 
 
@@ -53,7 +52,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
         firebase = FirebaseAuth.getInstance();
-        db = FirebaseDatabase.getInstance().getReference();
 
         ButtonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
 /*TODO PONER LOGO Y TEXTO DE INICIAR SESION*/
 /*TODO VER SI ES NECESARIO PONER EN UNA VARIABLE EL USUARIO LOGEADO*/
     public void login(){
-        firebase.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        firebase.signInWithEmailAndPassword(email.trim(), password.trim()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
