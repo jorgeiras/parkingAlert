@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,24 +9,94 @@
     tools:context=".ParkingItemActivity">
 
 
-    <ImageView
-        android:id="@+id/cameraPicture"
-        android:layout_width="250dp"
-        android:layout_height="320dp"
-        android:layout_gravity="center"
-        app:layout_constraintBottom_toTopOf="@+id/fragment_container_view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.51" />
-
     <FrameLayout
         android:id="@+id/fragment_container_view"
         android:name="com.example.parkingalert.MapsItemFragment"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginBottom="131dp"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/itemImage"
+        android:layout_width="134dp"
+        android:layout_height="179dp"
+        android:layout_marginTop="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.057"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_container_view"></ImageView>
+
+    <TextView
+        android:id="@+id/itemInfoStreet"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toEndOf="@+id/itemImage"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_container_view"></TextView>
+
+    <TextView
+        android:id="@+id/itemInfoCity"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/itemImage"
+        app:layout_constraintTop_toBottomOf="@+id/itemInfoStreet"
+        app:layout_constraintVertical_bias="0.069"></TextView>
+
+    <TextView
+        android:id="@+id/itemTimeStamp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/itemImage"
+        app:layout_constraintTop_toBottomOf="@+id/itemInfoStreet"
+        app:layout_constraintVertical_bias="0.191"></TextView>
+
+    <TextView
+        android:id="@+id/itemInfoUser"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+
+
+        android:layout_marginTop="124dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toEndOf="@+id/itemImage"
+        app:layout_constraintTop_toBottomOf="@+id/itemInfoStreet"
+        app:layout_constraintVertical_bias="0.0"></TextView>
+
+
+    <Button
+        android:id="@+id/ButtonServido"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="¡me ha servido!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemImage"
+        app:layout_constraintVertical_bias="0.413"></Button>
+
+    <Button
+        android:id="@+id/ButtonNoServido"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="no me ha servido"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ButtonServido"
+        app:layout_constraintVertical_bias="0.347"></Button>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
