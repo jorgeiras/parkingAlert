@@ -69,7 +69,25 @@ public class parkAdapter extends RecyclerView.Adapter<parkAdapter.ParkViewHolder
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    context.startActivity(new Intent(context, ParkingItemActivity.class));
+                    Intent itemActivity = new Intent(context, ParkingItemActivity.class);
+                    int i = getAbsoluteAdapterPosition();
+
+                    try {
+                        String[] address = getCityAddress(list.get(i));
+                        itemActivity.putExtra("streetAdress",address[0]);
+                        itemActivity.putExtra("cityName",address[1]);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    itemActivity.putExtra("UserID",list.get(i).getUserID());
+                    itemActivity.putExtra("encodedBitMap",list.get(i).getEncodedBitmapPhoto());
+                    itemActivity.putExtra("latitude",list.get(i).getLatitude());
+                    itemActivity.putExtra("longitude",list.get(i).getLongitude());
+                    itemActivity.putExtra("timeStamp",list.get(i).getTimeStamp());
+                    context.startActivity(itemActivity);
+
                 }
             });
 
