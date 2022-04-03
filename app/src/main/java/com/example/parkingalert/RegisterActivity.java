@@ -96,11 +96,13 @@ public class RegisterActivity extends AppCompatActivity {
                     Map<String,Object> UserDataRegister = new HashMap<>();
                     //UserDataRegister.put("UserID", User);
                     UserDataRegister.put("name", name);
-                    UserDataRegister.put("email", name);
+                    UserDataRegister.put("email", email);
+                    UserDataRegister.put("score", 0);
 
-                    db.collection("users").add(UserDataRegister).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    db.collection("users").document(User).set(UserDataRegister).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
-                        public void onSuccess(DocumentReference documentReference) {
+                        public void onSuccess(Void unused) {
+                            Toast.makeText(RegisterActivity.this, "Exito al registrar usuario", Toast.LENGTH_LONG).show();
                             startActivity(new Intent(RegisterActivity.this, AllParkingsActivity.class));
                             finish();
                         }
@@ -110,6 +112,21 @@ public class RegisterActivity extends AppCompatActivity {
                             Toast.makeText(RegisterActivity.this, "Error al intentar conectar con la base de datos", Toast.LENGTH_LONG).show();
                         }
                     });
+
+/*
+                    db.collection("users").add(UserDataRegister).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Toast.makeText(RegisterActivity.this, "Exito al registrar usuario", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(RegisterActivity.this, AllParkingsActivity.class));
+                            finish();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(RegisterActivity.this, "Error al intentar conectar con la base de datos", Toast.LENGTH_LONG).show();
+                        }
+                    });*/
                     /*
                     db.child("Users").child(User).setValue(UserDataRegister).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
