@@ -16,9 +16,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsItemFragment extends Fragment {
+public class MapsItemFragment extends Fragment implements OnMapReadyCallback {
 
-    private OnMapReadyCallback callback = new OnMapReadyCallback() {
+    private double latitude;
+    private double longitude;
+
 
         /**
          * Manipulates the map once available.
@@ -31,17 +33,22 @@ public class MapsItemFragment extends Fragment {
          */
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            LatLng sydney = new LatLng(-34, 151);
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            LatLng parkPosition = new LatLng(latitude, longitude);
+            googleMap.addMarker(new MarkerOptions().position(parkPosition).title("plaza de parking"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(parkPosition, 16.0f));
+
         }
-    };
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
+        Bundle arguments = this.getArguments();
+        latitude = arguments.getDouble("latitude");
+        longitude = arguments.getDouble("longitude");
         return inflater.inflate(R.layout.fragment_maps_item, container, false);
     }
 
@@ -49,9 +56,10 @@ public class MapsItemFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         SupportMapFragment mapFragment =
-                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(callback);
-        }
+                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapItem);
+
+
+
+        mapFragment.getMapAsync(this);
     }
 }
