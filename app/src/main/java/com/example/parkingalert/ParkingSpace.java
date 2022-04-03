@@ -12,6 +12,14 @@ public class ParkingSpace {
 
     }
 
+    public ParkingSpace(String userID, String encodedBitmapPhoto, double latitude, double longitude, long timeStamp) {
+        UserID = userID;
+        this.encodedBitmapPhoto = encodedBitmapPhoto;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.timeStamp = timeStamp;
+    }
+
     public String getUserID() {
         return UserID;
     }
