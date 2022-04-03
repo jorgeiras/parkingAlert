@@ -6,10 +6,16 @@
     tools:context=".PopularParkingsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshRankingUsers"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="populares"
-        android:gravity="center"/>
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerRankingUsers"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </FrameLayout>

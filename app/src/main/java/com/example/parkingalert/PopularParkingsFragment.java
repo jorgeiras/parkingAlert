@@ -2,11 +2,27 @@ package com.example.parkingalert;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +30,13 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class PopularParkingsFragment extends Fragment {
+
+    private RecyclerView recyclerView;
+    FirebaseFirestore db;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private List<UserInfo> userInfoList;
+    private UserInfoAdapter userInfoAdapter;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,6 +82,58 @@ public class PopularParkingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_popular_parkings, container, false);
+
+        View v = inflater.inflate(R.layout.fragment_popular_parkings, container, false);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipeRefreshRankingUsers);
+        db = FirebaseFirestore.getInstance();
+        recyclerView = v.findViewById(R.id.recyclerRankingUsers);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        userInfoList = new ArrayList<>();
+        userInfoAdapter = new UserInfoAdapter(getActivity(),userInfoList);
+        recyclerView.setAdapter(userInfoAdapter);
+
+        db.collection("users").orderBy("score", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for(QueryDocumentSnapshot document : task.getResult()){
+                        UserInfo us = document.toObject(UserInfo.class);
+                        userInfoList.add(us);
+                    }
+                    userInfoAdapter.notifyDataSetChanged();
+                }else{
+                    Toast.makeText(getActivity(), "error" + task.getException(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
+
+            @Override
+            public void onRefresh() {
+                recyclerView.setAdapter(userInfoAdapter);
+                userInfoList.clear();
+                db.collection("users").orderBy("score", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for(QueryDocumentSnapshot document : task.getResult()){
+                                UserInfo us = document.toObject(UserInfo.class);
+                                userInfoList.add(us);
+                            }
+                            userInfoAdapter.notifyDataSetChanged();
+                        }else{
+                            Toast.makeText(getActivity(), "error" + task.getException(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                swipeRefreshLayout.setRefreshing(false);
+
+            }
+        });
+
+        return v;
+
     }
 }
