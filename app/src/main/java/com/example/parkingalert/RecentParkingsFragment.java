@@ -109,17 +109,7 @@ public class RecentParkingsFragment extends Fragment {
 
         swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipeRefreshRecent);
 
-        /*
-        db = FirebaseFirestore.getInstance();
-        Query q = db.collection("Parkings").orderBy("timeStamp", Query.Direction.DESCENDING);
-        recyclerView = v.findViewById(R.id.recyclerRecent);
 
-
-        FirestoreRecyclerOptions<ParkingSpace> options = new FirestoreRecyclerOptions.Builder<ParkingSpace>().setQuery(q,ParkingSpace.class).build();
-        parkingSpaceAdapter = new ParkingSpaceAdapter(options,getContext());
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(parkingSpaceAdapter);
-*/
 
         db = FirebaseFirestore.getInstance();
         recyclerView = v.findViewById(R.id.recyclerRecent);
@@ -129,33 +119,6 @@ public class RecentParkingsFragment extends Fragment {
         recyclerView.setAdapter(parkAdapterObject);
 
         getDeviceLocation();
-        db.collection("Parkings").orderBy("timeStamp", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-
-                        ParkingSpace p = document.toObject(ParkingSpace.class);
-                        double lat = 0.0144927536231884;
-                        double lon = 0.0181818181818182;
-                        double distance = 2;
-                        double lowLat = latitude- (distance * lat);
-                        double highLat = latitude + (distance * lat);
-                        double lowLong = longitude - (distance * lon);
-                        double highLong = longitude + (distance * lon);
-
-                        if( p.getLatitude() > lowLat && p.getLatitude() < highLat && p.getLongitude() > lowLong && p.getLongitude() < highLong ){
-
-                            parkingSpaceList.add(p);
-                        }
-
-                    }
-                    parkAdapterObject.notifyDataSetChanged();
-                } else {
-                    Toast.makeText(getActivity(), "error" + task.getException(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -170,6 +133,7 @@ public class RecentParkingsFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
                                 ParkingSpace p = document.toObject(ParkingSpace.class);
+                                p.setDocID(document.getId());
                                 double lat = 0.0144927536231884;
                                 double lon = 0.0181818181818182;
                                 double distance = 2;
@@ -225,9 +189,41 @@ public class RecentParkingsFragment extends Fragment {
     }
 
 
+    @Override
+    public void onResume() {
 
+        super.onResume();
+        recyclerView.setAdapter(parkAdapterObject);
+        parkingSpaceList.clear();
+        db.collection("Parkings").orderBy("timeStamp", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
 
+                        ParkingSpace p = document.toObject(ParkingSpace.class);
+                        p.setDocID(document.getId());
+                        double lat = 0.0144927536231884;
+                        double lon = 0.0181818181818182;
+                        double distance = 2;
+                        double lowLat = latitude- (distance * lat);
+                        double highLat = latitude + (distance * lat);
+                        double lowLong = longitude - (distance * lon);
+                        double highLong = longitude + (distance * lon);
 
+                        if( p.getLatitude() > lowLat && p.getLatitude() < highLat && p.getLongitude() > lowLong && p.getLongitude() < highLong ){
 
+                            parkingSpaceList.add(p);
+                        }
 
+                    }
+                    parkAdapterObject.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getActivity(), "error" + task.getException(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        swipeRefreshLayout.setRefreshing(false);
+
+    }
 }

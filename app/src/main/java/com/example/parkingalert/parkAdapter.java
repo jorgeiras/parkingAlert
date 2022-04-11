@@ -81,6 +81,7 @@ public class parkAdapter extends RecyclerView.Adapter<parkAdapter.ParkViewHolder
                     }
 
 
+                    itemActivity.putExtra("docID",list.get(i).getDocID());
                     itemActivity.putExtra("UserID",list.get(i).getUserID());
                     itemActivity.putExtra("encodedBitMap",list.get(i).getEncodedBitmapPhoto());
                     itemActivity.putExtra("latitude",list.get(i).getLatitude());

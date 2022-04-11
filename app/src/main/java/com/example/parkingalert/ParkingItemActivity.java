@@ -1,27 +1,31 @@
 package com.example.parkingalert;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Date;
-import java.util.Map;
 
 public class ParkingItemActivity extends AppCompatActivity {
 
@@ -30,11 +34,19 @@ public class ParkingItemActivity extends AppCompatActivity {
     private TextView textViewCity;
     private TextView textViewUser;
     private TextView textViewTimeStamp;
-    private Button buttonServido;
-    private Button buttonNoServido;
+    private Button buttonPayParking;
+    private Button buttonParkingBusy;
     private double latitude;
     private double longitude;
     FirebaseFirestore db;
+    ActivityResultLauncher<Intent> mGetContent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if(result.getData() != null){
+                finish();
+            }
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +74,8 @@ public class ParkingItemActivity extends AppCompatActivity {
         textViewCity = findViewById(R.id.itemInfoCity);
         textViewUser = findViewById(R.id.itemInfoUser);
         textViewTimeStamp = findViewById(R.id.itemTimeStamp);
-        buttonServido = findViewById(R.id.ButtonServido);
-        buttonNoServido = findViewById(R.id.ButtonNoServido);
+        buttonPayParking = findViewById(R.id.ButtonPayParking);
+        buttonParkingBusy = findViewById(R.id.ButtonParkingBusy);
 
         imageView.setImageBitmap(decodeImage(i.getStringExtra("encodedBitMap")));
         textViewStreet.setText(i.getStringExtra("streetAdress"));
@@ -83,7 +95,25 @@ public class ParkingItemActivity extends AppCompatActivity {
         });
 
 
+        buttonPayParking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent stripeIntent = new Intent(ParkingItemActivity.this, StripeCheckOutActivity.class);
+                stripeIntent.putExtra("UserID",i.getStringExtra("UserID"));
+                stripeIntent.putExtra("docID",i.getStringExtra("docID"));
+                mGetContent.launch(stripeIntent);
+            }
+        });
 
+
+        buttonParkingBusy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                db.collection("Parkings").document(i.getStringExtra("docID")).delete();
+                Toast.makeText(ParkingItemActivity.this,"plaza borrada",Toast.LENGTH_LONG).show();
+                finish();
+            }
+        });
 
     }
 

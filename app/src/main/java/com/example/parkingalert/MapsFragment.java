@@ -24,6 +24,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -71,7 +72,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             }
             googleMap.setMyLocationEnabled(true);
 
-
+            googleMap.getUiSettings().setMapToolbarEnabled(false);
 
 
 

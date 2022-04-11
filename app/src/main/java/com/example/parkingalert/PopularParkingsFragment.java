@@ -91,22 +91,7 @@ public class PopularParkingsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         userInfoList = new ArrayList<>();
         userInfoAdapter = new UserInfoAdapter(getActivity(),userInfoList);
-        recyclerView.setAdapter(userInfoAdapter);
 
-        db.collection("users").orderBy("score", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
-                    for(QueryDocumentSnapshot document : task.getResult()){
-                        UserInfo us = document.toObject(UserInfo.class);
-                        userInfoList.add(us);
-                    }
-                    userInfoAdapter.notifyDataSetChanged();
-                }else{
-                    Toast.makeText(getActivity(), "error" + task.getException(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
 
@@ -135,5 +120,28 @@ public class PopularParkingsFragment extends Fragment {
 
         return v;
 
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        recyclerView.setAdapter(userInfoAdapter);
+        userInfoList.clear();
+        db.collection("users").orderBy("score", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for(QueryDocumentSnapshot document : task.getResult()){
+                        UserInfo us = document.toObject(UserInfo.class);
+                        userInfoList.add(us);
+                    }
+                    userInfoAdapter.notifyDataSetChanged();
+                }else{
+                    Toast.makeText(getActivity(), "error" + task.getException(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

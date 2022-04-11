@@ -7,6 +7,7 @@ public class ParkingSpace {
     private double latitude;
     private double longitude;
     private long timeStamp;
+    private String docID;
 
     public ParkingSpace(){
 
@@ -58,5 +59,13 @@ public class ParkingSpace {
 
     public void setTimeStamp(long timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public String getDocID() {
+        return docID;
+    }
+
+    public void setDocID(String docID) {
+        this.docID = docID;
     }
 }

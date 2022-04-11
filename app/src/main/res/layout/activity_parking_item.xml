@@ -75,10 +75,10 @@
 
 
     <Button
-        android:id="@+id/ButtonServido"
+        android:id="@+id/ButtonPayParking"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="¡me ha servido!"
+        android:text="pagar parking"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -87,15 +87,15 @@
         app:layout_constraintVertical_bias="0.413"></Button>
 
     <Button
-        android:id="@+id/ButtonNoServido"
+        android:id="@+id/ButtonParkingBusy"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="no me ha servido"
+        android:text="plaza ya ocupada"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ButtonServido"
+        app:layout_constraintTop_toBottomOf="@+id/ButtonPayParking"
         app:layout_constraintVertical_bias="0.347"></Button>
 
 

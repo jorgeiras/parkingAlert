@@ -85,13 +85,11 @@ public class AddParkingActivity extends AppCompatActivity {
                 encodedbitmap = CameraFragment.getBitmapPhoto();
                 if(encodedbitmap != null){
                     String User = firebase.getUid();
-                    //String hash = GeoFireUtils.getGeoHashForLocation(new GeoLocation(latitude, longitude));
 
                     Map<String,Object> parkingData = new HashMap<>();
                     parkingData.put("UserID", User);
                     parkingData.put("longitude", longitude);
                     parkingData.put("latitude", latitude);
-                    //parkingData.put("geoHash", latitude);
                     parkingData.put("encodedBitmapPhoto", encodedbitmap);
                     parkingData.put("timeStamp", System.currentTimeMillis());
 
@@ -109,20 +107,7 @@ public class AddParkingActivity extends AppCompatActivity {
                             Toast.makeText(AddParkingActivity.this, "Error al intentar conectar con la base de datos", Toast.LENGTH_LONG).show();
                         }
                     });
-                    /*
-                    db.child("Parkings").push().setValue(parkingData).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                encodedbitmap = null;
-                                Toast.makeText(AddParkingActivity.this, "plaza publicada con exito", Toast.LENGTH_LONG).show();
-                                finish();
-                            }
-                            else{
-                                Toast.makeText(AddParkingActivity.this, "Error al intentar conectar con la base de datos", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });*/
+
                 }
                 else{
                     Toast.makeText(AddParkingActivity.this,"haga una foto de la plaza",Toast.LENGTH_LONG).show();
