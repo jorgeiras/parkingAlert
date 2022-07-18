@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ParkingItemActivity extends AppCompatActivity {
@@ -36,8 +37,11 @@ public class ParkingItemActivity extends AppCompatActivity {
     private TextView textViewTimeStamp;
     private Button buttonPayParking;
     private Button buttonParkingBusy;
+    private TextView textViewUserScore;
     private double latitude;
     private double longitude;
+    private boolean paymentArea;
+    private int score;
     FirebaseFirestore db;
     ActivityResultLauncher<Intent> mGetContent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
@@ -58,6 +62,7 @@ public class ParkingItemActivity extends AppCompatActivity {
         latitude = i.getDoubleExtra("latitude",0);
         longitude = i.getDoubleExtra("longitude",0);
 
+
         if(savedInstanceState==null){
             Fragment mapFrag = new MapsItemFragment();
             Bundle arguments= new Bundle();
@@ -76,13 +81,19 @@ public class ParkingItemActivity extends AppCompatActivity {
         textViewTimeStamp = findViewById(R.id.itemTimeStamp);
         buttonPayParking = findViewById(R.id.ButtonPayParking);
         buttonParkingBusy = findViewById(R.id.ButtonParkingBusy);
+        textViewUserScore = findViewById(R.id.itemUserScore);
 
         imageView.setImageBitmap(decodeImage(i.getStringExtra("encodedBitMap")));
         textViewStreet.setText(i.getStringExtra("streetAdress"));
         textViewCity.setText(i.getStringExtra("cityName"));
+
+
         long l = i.getLongExtra("timeStamp",0);
-        Date d = new Date(l * 1000);
-        textViewTimeStamp.setText(d.toString());
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
+        Date resultdate = new Date(l);
+        textViewTimeStamp.setText(sdf.format(resultdate));
+
+
 
         db.collection("users").document(i.getStringExtra("UserID")).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -90,27 +101,51 @@ public class ParkingItemActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
                     UserInfo us = task.getResult().toObject(UserInfo.class);
                     textViewUser.setText(us.getName());
+                    score = us.getScore();
+                    textViewUserScore.setText("Puntuación de usuario: " + score);
                 }
             }
         });
 
 
+
+
+        paymentArea = i.getBooleanExtra("paymentArea",false);
+        if(paymentArea == true){
+            buttonPayParking.setText("Pagar plaza");
+        }
+        else{
+            buttonPayParking.setText("Ocupar plaza");
+        }
+
         buttonPayParking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent stripeIntent = new Intent(ParkingItemActivity.this, StripeCheckOutActivity.class);
-                stripeIntent.putExtra("UserID",i.getStringExtra("UserID"));
-                stripeIntent.putExtra("docID",i.getStringExtra("docID"));
-                mGetContent.launch(stripeIntent);
+
+                if(paymentArea==true){
+                    Intent stripeIntent = new Intent(ParkingItemActivity.this, StripeCheckOutActivity.class);
+                    stripeIntent.putExtra("UserID",i.getStringExtra("UserID"));
+                    stripeIntent.putExtra("docID",i.getStringExtra("docID"));
+                    mGetContent.launch(stripeIntent);
+                }
+                else{
+                    db.collection("users").document(i.getStringExtra("UserID")).update("score",score + 1);
+                    db.collection("Parkings").document(i.getStringExtra("docID")).delete();
+                    Toast.makeText(ParkingItemActivity.this,"Plaza accedida con exito",Toast.LENGTH_LONG).show();
+                    finish();
+                }
+
             }
         });
+
+
 
 
         buttonParkingBusy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 db.collection("Parkings").document(i.getStringExtra("docID")).delete();
-                Toast.makeText(ParkingItemActivity.this,"plaza borrada",Toast.LENGTH_LONG).show();
+                Toast.makeText(ParkingItemActivity.this,"Plaza borrada",Toast.LENGTH_LONG).show();
                 finish();
             }
         });

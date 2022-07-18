@@ -13,6 +13,9 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.geofire.GeoFireUtils;
@@ -37,6 +40,8 @@ public class AddParkingActivity extends AppCompatActivity {
 
     private Button buttonAccept;
     private Button buttonConfirm;
+    private TextView textViewRadioGroup;
+    private RadioGroup radioGroup;
     private double latitude;
     private double longitude;
     private String encodedbitmap;
@@ -62,18 +67,27 @@ public class AddParkingActivity extends AppCompatActivity {
 
         buttonAccept = (Button) findViewById(R.id.ButtonAccept);
         buttonConfirm = (Button) findViewById(R.id.ButtonConfirm);
+        radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        textViewRadioGroup = (TextView) findViewById(R.id.textViewRadioGroup);
 
         firebase = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
 
+
         buttonAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!checkRadioGroup()){
+                    Toast.makeText(AddParkingActivity.this, "seleccione si es de pago o no", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_view,CameraFragment.class,null).commit();
                 longitude = MapsFragment.getLong();
                 latitude = MapsFragment.getLat();
                 buttonAccept.setVisibility(View.GONE);
+                textViewRadioGroup.setVisibility(View.GONE);
+                radioGroup.setVisibility(View.GONE);
                 buttonConfirm.setVisibility(View.VISIBLE);
             }
         });
@@ -85,13 +99,13 @@ public class AddParkingActivity extends AppCompatActivity {
                 encodedbitmap = CameraFragment.getBitmapPhoto();
                 if(encodedbitmap != null){
                     String User = firebase.getUid();
-
                     Map<String,Object> parkingData = new HashMap<>();
                     parkingData.put("UserID", User);
                     parkingData.put("longitude", longitude);
                     parkingData.put("latitude", latitude);
                     parkingData.put("encodedBitmapPhoto", encodedbitmap);
                     parkingData.put("timeStamp", System.currentTimeMillis());
+                    parkingData.put("paymentArea", getSelectedRadioButton());
 
                     db.collection("Parkings").add(parkingData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
@@ -121,11 +135,24 @@ public class AddParkingActivity extends AppCompatActivity {
 
     }
 
+    private boolean checkRadioGroup() {
+        if(radioGroup.getCheckedRadioButtonId()==-1){
+            return false;
+        }
+        return true;
+    }
 
-
-
-
-
+    private boolean getSelectedRadioButton(){
+        int radioButtonID = radioGroup.getCheckedRadioButtonId();
+        View radioButton = radioGroup.findViewById(radioButtonID);
+        int idx = radioGroup.indexOfChild(radioButton);
+        if (idx == 0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 
 
 }

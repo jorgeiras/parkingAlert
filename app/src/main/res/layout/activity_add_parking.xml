@@ -10,23 +10,60 @@
         android:id="@+id/fragment_container_view"
         android:name="com.example.parkingalert.MapsFragment"
         android:layout_width="match_parent"
-        android:layout_height="600dp"
-        android:layout_marginBottom="131dp"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:layout_height="500dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/textViewRadioGroup"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="-16dp" />
+
+    <TextView
+        android:id="@+id/textViewRadioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¿Es zona de pago?"
+        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_container_view" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/ButtonAccept"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewRadioGroup">
+
+        <RadioButton
+            android:id="@+id/radio_Yes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Si" />
+
+        <RadioButton
+            android:id="@+id/radio_No"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No" />
+    </RadioGroup>
 
     <Button
         android:id="@+id/ButtonAccept"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="154dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="155dp"
-        android:layout_marginBottom="48dp"
         android:text="Aceptar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_container_view" />
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup"
+        app:layout_constraintVertical_bias="0.778" />
+
     <Button
         android:id="@+id/ButtonConfirm"
         android:layout_width="wrap_content"

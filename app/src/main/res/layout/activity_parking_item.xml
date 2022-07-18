@@ -74,6 +74,20 @@
         app:layout_constraintVertical_bias="0.0"></TextView>
 
 
+    <TextView
+        android:id="@+id/itemUserScore"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+
+
+        android:layout_marginTop="124dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toEndOf="@+id/itemImage"
+        app:layout_constraintTop_toBottomOf="@+id/itemInfoStreet"
+        app:layout_constraintVertical_bias="0.066"></TextView>
+
     <Button
         android:id="@+id/ButtonPayParking"
         android:layout_width="200dp"
@@ -85,6 +99,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemImage"
         app:layout_constraintVertical_bias="0.413"></Button>
+
 
     <Button
         android:id="@+id/ButtonParkingBusy"

@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -41,6 +43,17 @@ public class parkAdapter extends RecyclerView.Adapter<parkAdapter.ParkViewHolder
         Bitmap image = decodeImage(list.get(position).getEncodedBitmapPhoto());
         holder.imageParking.setImageBitmap(image);
 
+        Date d = new Date(list.get(position).getTimeStamp());
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
+        holder.timeStamp.setText(sdf.format(d));
+
+        if(list.get(position).isPaymentArea() == true){
+            holder.paymentArea.setText("Zona de pago");
+        }
+        else{
+            holder.paymentArea.setText("Zona no de pago");
+        }
+
         try {
             String[] address = getCityAddress(list.get(position));
             holder.streetAddress.setText(address[0]);
@@ -61,6 +74,9 @@ public class parkAdapter extends RecyclerView.Adapter<parkAdapter.ParkViewHolder
 
         TextView streetAddress;
         TextView cityAddress;
+        TextView timeStamp;
+        TextView User;
+        TextView paymentArea;
         ImageView imageParking;
 
         public ParkViewHolder(@NonNull View itemView){
@@ -86,6 +102,7 @@ public class parkAdapter extends RecyclerView.Adapter<parkAdapter.ParkViewHolder
                     itemActivity.putExtra("encodedBitMap",list.get(i).getEncodedBitmapPhoto());
                     itemActivity.putExtra("latitude",list.get(i).getLatitude());
                     itemActivity.putExtra("longitude",list.get(i).getLongitude());
+                    itemActivity.putExtra("paymentArea", list.get(i).isPaymentArea());
                     itemActivity.putExtra("timeStamp",list.get(i).getTimeStamp());
                     context.startActivity(itemActivity);
 
@@ -95,6 +112,9 @@ public class parkAdapter extends RecyclerView.Adapter<parkAdapter.ParkViewHolder
             streetAddress = itemView.findViewById(R.id.parkStreet);
             cityAddress = itemView.findViewById(R.id.parkCity);
             imageParking = itemView.findViewById(R.id.imageParking);
+            paymentArea = itemView.findViewById(R.id.parkPayment);
+            timeStamp =itemView.findViewById(R.id.parkTimeStamp);
+
         }
 
 
