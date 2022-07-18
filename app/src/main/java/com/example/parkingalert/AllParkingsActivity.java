@@ -9,25 +9,33 @@ import android.location.LocationManager;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.provider.Settings;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.parkingalert.ui.main.SectionsPagerAdapter;
 import com.example.parkingalert.databinding.ActivityAllParkingsBinding;
 
-public class AllParkingsActivity extends AppCompatActivity {
+public class AllParkingsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private ActivityAllParkingsBinding binding;
     private int permissionAccepted = 1;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +43,22 @@ public class AllParkingsActivity extends AppCompatActivity {
 
         binding = ActivityAllParkingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        getSupportActionBar().setTitle("parkingAlert");
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView = findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        LocationPermission();
+        isGPSEnabled();
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = binding.viewPager;
@@ -117,5 +141,24 @@ public class AllParkingsActivity extends AppCompatActivity {
         else{
             ActivityCompat.requestPermissions(this,new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, permissionAccepted);
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.nav_item_options:{
+                startActivity(new Intent(AllParkingsActivity.this, OptionsActivity.class));
+                finish();
+                break;
+            }
+            case R.id.nav_item_logOut:{
+                startActivity(new Intent(AllParkingsActivity.this, LoginActivity.class));
+                finish();
+                break;
+            }
+        }
+
+        return true;
     }
 }
