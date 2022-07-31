@@ -18,11 +18,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.provider.Settings;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -90,6 +92,8 @@ public class AllParkingsActivity extends AppCompatActivity implements Navigation
 
             }
         });
+
+
     }
 
 
@@ -149,11 +153,12 @@ public class AllParkingsActivity extends AppCompatActivity implements Navigation
         switch (item.getItemId()){
             case R.id.nav_item_options:{
                 startActivity(new Intent(AllParkingsActivity.this, OptionsActivity.class));
-                finish();
+                drawerLayout.closeDrawers();
                 break;
             }
             case R.id.nav_item_logOut:{
                 startActivity(new Intent(AllParkingsActivity.this, LoginActivity.class));
+                drawerLayout.closeDrawers();
                 finish();
                 break;
             }
@@ -161,4 +166,16 @@ public class AllParkingsActivity extends AppCompatActivity implements Navigation
 
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawers();
+        }else{
+            super.onBackPressed();
+        }
+    }
+
+
+
 }
