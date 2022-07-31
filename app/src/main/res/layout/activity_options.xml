@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     tools:context=".OptionsActivity">
 
 
@@ -20,36 +21,37 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"></TextView>
 
-    <Spinner
-        android:id="@+id/spinnerOptions"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="112dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="104dp"
-        android:background="@android:drawable/btn_dropdown"
-        android:spinnerMode="dropdown"
-        app:layout_constraintBottom_toTopOf="@+id/button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/editTextOptions"
-        app:layout_constraintTop_toBottomOf="@+id/textViewOptions"
-        app:layout_constraintVertical_bias="0.115" />
 
-    <EditText
-        android:id="@+id/editTextOptions"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/button"
-        app:layout_constraintEnd_toStartOf="@+id/spinnerOptions"
-        app:layout_constraintHorizontal_bias="0.74"
+    <RelativeLayout
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonOption"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewOptions"
-        app:layout_constraintVertical_bias="0.277">
+        android:gravity="center">
 
-    </EditText>
+        <EditText
+            android:id="@+id/editTextOptions"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:layout_marginRight="7dp"
+            android:layout_toLeftOf="@+id/spinnerOptions">
+
+        </EditText>
+
+        <Spinner
+            android:id="@+id/spinnerOptions"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown" />
+
+
+    </RelativeLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonOption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="120dp"
@@ -58,5 +60,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

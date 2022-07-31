@@ -3,6 +3,7 @@ package com.example.parkingalert;
 import android.Manifest;
 import android.content.Context;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -294,6 +295,7 @@ public class RecentParkingsFragment extends Fragment {
 
                         ParkingSpace p = document.toObject(ParkingSpace.class);
                         p.setDocID(document.getId());
+                        /*
                         double lat = 0.0144927536231884;
                         double lon = 0.0181818181818182;
                         double distance = 2;
@@ -305,7 +307,37 @@ public class RecentParkingsFragment extends Fragment {
                         if( p.getLatitude() > lowLat && p.getLatitude() < highLat && p.getLongitude() > lowLong && p.getLongitude() < highLong ){
 
                             parkingSpaceList.add(p);
+                        }*/
+
+                        SharedPreferences sharedPreferences = getContext().getSharedPreferences("options", Context.MODE_PRIVATE);
+                        int distance = sharedPreferences.getInt("distance",0);
+                        String measure = sharedPreferences.getString("measure","m");
+
+                        if(distance == 0){
+                            distance = 500;
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putInt("distance",500);
+                            editor.apply();
+
                         }
+                        if(measure == null){
+                            measure = "m";
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("measure","m");
+                            editor.apply();
+                        }else if(measure.equals("km")){
+                            distance =  distance *1000;
+                        }
+
+                        float result[] = new float[1];
+                        Location.distanceBetween(latitude,longitude,p.getLatitude(),p.getLongitude(),result);
+
+
+
+                        if(result[0] < distance){
+                            parkingSpaceList.add(p);
+                        }
+
 
                     }
                     parkAdapterObject.notifyDataSetChanged();
