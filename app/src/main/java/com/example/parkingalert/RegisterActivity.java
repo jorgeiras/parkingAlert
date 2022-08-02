@@ -102,8 +102,9 @@ public class RegisterActivity extends AppCompatActivity {
                     db.collection("users").document(User).set(UserDataRegister).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-                            Toast.makeText(RegisterActivity.this, "Exito al registrar usuario", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(RegisterActivity.this, AllParkingsActivity.class));
+                            firebase.getCurrentUser().sendEmailVerification();
+                            Toast.makeText(RegisterActivity.this, "Debe verificar su email con el correo que acabamos de enviarle", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                             finish();
                         }
                     }).addOnFailureListener(new OnFailureListener() {

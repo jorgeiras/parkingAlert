@@ -90,8 +90,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    startActivity(new Intent(LoginActivity.this, AllParkingsActivity.class));
-                    finish();
+                    if(!firebase.getCurrentUser().isEmailVerified()){
+                        Toast.makeText(LoginActivity.this,"Debe verificar su email",Toast.LENGTH_LONG).show();
+                    }else{
+                        startActivity(new Intent(LoginActivity.this, AllParkingsActivity.class));
+                        finish();
+                    }
                 }
                 else{
                     Toast.makeText(LoginActivity.this,"Email o contraseña invalidos", Toast.LENGTH_LONG).show();
