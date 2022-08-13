@@ -13,8 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.parkingalert.PopularParkingsFragment;
-import com.example.parkingalert.R;
-import com.example.parkingalert.RecentParkingsFragment;
+import com.example.parkingalert.ParkingsFragment;
 import com.example.parkingalert.databinding.FragmentAllParkingsBinding;
 
 /**
@@ -33,7 +32,7 @@ public class PlaceholderFragment extends Fragment {
 
         switch (index){
             case 1:
-                fragment = new RecentParkingsFragment();
+                fragment = new ParkingsFragment();
                 break;
             case 2:
                 fragment = new PopularParkingsFragment();

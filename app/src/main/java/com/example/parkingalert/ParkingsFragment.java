@@ -6,13 +6,10 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -21,14 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Switch;
 import android.widget.Toast;
 
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -39,14 +33,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -57,10 +45,10 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link RecentParkingsFragment#newInstance} factory method to
+ * Use the {@link ParkingsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RecentParkingsFragment extends Fragment {
+public class ParkingsFragment extends Fragment {
 
 
     private RecyclerView recyclerView;
@@ -84,7 +72,7 @@ public class RecentParkingsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public RecentParkingsFragment() {
+    public ParkingsFragment() {
         // Required empty public constructor
     }
 
@@ -94,11 +82,11 @@ public class RecentParkingsFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment RecentParkingsFragment.
+     * @return A new instance of fragment ParkingsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static RecentParkingsFragment newInstance(String param1, String param2) {
-        RecentParkingsFragment fragment = new RecentParkingsFragment();
+    public static ParkingsFragment newInstance(String param1, String param2) {
+        ParkingsFragment fragment = new ParkingsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -291,6 +279,9 @@ public class RecentParkingsFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
+                    Location actualLocation = new Location("");
+                    actualLocation.setLatitude(latitude);
+                    actualLocation.setLongitude(longitude);
                     for (QueryDocumentSnapshot document : task.getResult()) {
 
                         ParkingSpace p = document.toObject(ParkingSpace.class);
@@ -328,17 +319,25 @@ public class RecentParkingsFragment extends Fragment {
                         }else if(measure.equals("km")){
                             distance =  distance *1000;
                         }
-
+                        /*
                         float result[] = new float[1];
                         Location.distanceBetween(latitude,longitude,p.getLatitude(),p.getLongitude(),result);
-
 
 
                         if(result[0] < distance){
                             parkingSpaceList.add(p);
                         }
+                         */
 
+                        Location newlocation = new Location("");
+                        newlocation.setLatitude(p.getLatitude());
+                        newlocation.setLongitude(p.getLongitude());
 
+                        float result = actualLocation.distanceTo(newlocation);
+
+                        if(result < distance){
+                            parkingSpaceList.add(p);
+                        }
                     }
                     parkAdapterObject.notifyDataSetChanged();
                 } else {
