@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.parkingalert.PopularParkingsFragment;
+import com.example.parkingalert.UserRankingFragment;
 import com.example.parkingalert.ParkingsFragment;
 import com.example.parkingalert.databinding.FragmentAllParkingsBinding;
 
@@ -35,7 +35,7 @@ public class PlaceholderFragment extends Fragment {
                 fragment = new ParkingsFragment();
                 break;
             case 2:
-                fragment = new PopularParkingsFragment();
+                fragment = new UserRankingFragment();
                 break;
         }
 

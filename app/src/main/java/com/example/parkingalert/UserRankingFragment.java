@@ -19,17 +19,16 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link PopularParkingsFragment#newInstance} factory method to
+ * Use the {@link UserRankingFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PopularParkingsFragment extends Fragment {
+public class UserRankingFragment extends Fragment {
 
     private RecyclerView recyclerView;
     FirebaseFirestore db;
@@ -47,7 +46,7 @@ public class PopularParkingsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public PopularParkingsFragment() {
+    public UserRankingFragment() {
         // Required empty public constructor
     }
 
@@ -57,11 +56,11 @@ public class PopularParkingsFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment PopularParkingsFragment.
+     * @return A new instance of fragment UserRankingFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PopularParkingsFragment newInstance(String param1, String param2) {
-        PopularParkingsFragment fragment = new PopularParkingsFragment();
+    public static UserRankingFragment newInstance(String param1, String param2) {
+        UserRankingFragment fragment = new UserRankingFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

@@ -52,7 +52,6 @@ public class ParkingsFragment extends Fragment {
 
 
     private RecyclerView recyclerView;
-    ParkingSpaceAdapter parkingSpaceAdapter;
     FirebaseFirestore db;
     private double latitude;
     private double longitude;
