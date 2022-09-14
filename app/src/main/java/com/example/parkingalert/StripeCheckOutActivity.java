@@ -257,7 +257,6 @@ public class StripeCheckOutActivity extends AppCompatActivity {
     private void paymentResult(PaymentSheetResult paymentSheetResult) {
         if(paymentSheetResult instanceof PaymentSheetResult.Completed){
             Toast.makeText(this,"pago completado", Toast.LENGTH_LONG).show();
-            /*TODO volver a la AllParkingactivity y borrar la plaza de firestore y recargar el recycler*/
             updateUserScore();
         }
     }

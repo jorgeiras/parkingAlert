@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,12 +56,11 @@ public class ParkingsFragment extends Fragment {
     FirebaseFirestore db;
     private double latitude;
     private double longitude;
-    FusedLocationProviderClient fusedLoc;
     List<ParkingSpace> parkingSpaceList;
     parkAdapter parkAdapterObject;
     private SwipeRefreshLayout swipeRefreshLayout;
     LocationRequest locationRequest;
-
+    int counter =0;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -128,37 +128,7 @@ public class ParkingsFragment extends Fragment {
             @Override
             public void onRefresh() {
                 getDeviceLocation();
-                recyclerView.setAdapter(parkAdapterObject);
-                parkingSpaceList.clear();
-                db.collection("Parkings").orderBy("timeStamp", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-
-                                ParkingSpace p = document.toObject(ParkingSpace.class);
-                                p.setDocID(document.getId());
-                                double lat = 0.0144927536231884;
-                                double lon = 0.0181818181818182;
-                                double distance = 2;
-                                double lowLat = latitude - (distance * lat);
-                                double highLat = latitude + (distance * lat);
-                                double lowLong = longitude - (distance * lon);
-                                double highLong = longitude + (distance * lon);
-
-                                if (p.getLatitude() > lowLat && p.getLatitude() < highLat && p.getLongitude() > lowLong && p.getLongitude() < highLong) {
-
-                                    parkingSpaceList.add(p);
-                                }
-
-                            }
-                            parkAdapterObject.notifyDataSetChanged();
-                        } else {
-                            Toast.makeText(getActivity(), "error" + task.getException(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                swipeRefreshLayout.setRefreshing(false);
+                filterParkings();
             }
         });
 
@@ -185,7 +155,6 @@ public class ParkingsFragment extends Fragment {
             public void onComplete(@NonNull Task<LocationSettingsResponse> task) {
                 try {
                     LocationSettingsResponse res = task.getResult(ApiException.class);
-                    Toast.makeText(getActivity(), "GPS ya activado", Toast.LENGTH_LONG).show();
                 } catch (ApiException e) {
 
                     switch (e.getStatusCode()) {
@@ -225,36 +194,17 @@ public class ParkingsFragment extends Fragment {
                 if(locationResult!=null && locationResult.getLocations().size() > 0){
                     latitude = locationResult.getLocations().get(locationResult.getLocations().size()-1).getLatitude();
                     longitude = locationResult.getLocations().get(locationResult.getLocations().size()-1).getLongitude();
+                    if(counter <0 && latitude!=0.0 && longitude != 0.0){
+                        Log.i("ParkingActivity","CONTADOR 2");
+                        filterParkings();
+                        counter++;
+                    }
+
                 }
             }
         }, Looper.getMainLooper());
 
 
-        /*
-        try {
-            if(fusedLoc==null){
-                fusedLoc = LocationServices.getFusedLocationProviderClient(getContext());
-            }
-
-            Task<Location> locationResult = fusedLoc.getLastLocation();
-            locationResult.addOnSuccessListener( new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    Location lastKnownLocation = location;
-                    if (lastKnownLocation != null) {
-
-                        latitude = lastKnownLocation.getLatitude();
-                        longitude = lastKnownLocation.getLongitude();
-
-                    }
-                }
-
-
-            });
-
-        } catch (SecurityException e)  {
-            Log.e("Exception: %s", e.getMessage(), e);
-        }*/
     }
 
 
@@ -271,6 +221,17 @@ public class ParkingsFragment extends Fragment {
     public void onResume() {
 
         super.onResume();
+        filterParkings();
+
+    }
+
+
+
+
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    private void filterParkings(){
+        Log.i("ParkingActivity","COMENZANDO FILTRO");
+        Log.i("ParkingActivity","latitud filtro:" + latitude+  "  longitud filtro: " + longitude);
         getDeviceLocation();
         recyclerView.setAdapter(parkAdapterObject);
         parkingSpaceList.clear();
@@ -285,48 +246,14 @@ public class ParkingsFragment extends Fragment {
 
                         ParkingSpace p = document.toObject(ParkingSpace.class);
                         p.setDocID(document.getId());
-                        /*
-                        double lat = 0.0144927536231884;
-                        double lon = 0.0181818181818182;
-                        double distance = 2;
-                        double lowLat = latitude- (distance * lat);
-                        double highLat = latitude + (distance * lat);
-                        double lowLong = longitude - (distance * lon);
-                        double highLong = longitude + (distance * lon);
-
-                        if( p.getLatitude() > lowLat && p.getLatitude() < highLat && p.getLongitude() > lowLong && p.getLongitude() < highLong ){
-
-                            parkingSpaceList.add(p);
-                        }*/
 
                         SharedPreferences sharedPreferences = getContext().getSharedPreferences("options", Context.MODE_PRIVATE);
-                        int distance = sharedPreferences.getInt("distance",0);
+                        int distance = sharedPreferences.getInt("distance",50);
                         String measure = sharedPreferences.getString("measure","m");
 
-                        if(distance == 0){
-                            distance = 500;
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putInt("distance",500);
-                            editor.apply();
-
-                        }
-                        if(measure == null){
-                            measure = "m";
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString("measure","m");
-                            editor.apply();
-                        }else if(measure.equals("km")){
+                        if(measure.equals("km")){
                             distance =  distance *1000;
                         }
-                        /*
-                        float result[] = new float[1];
-                        Location.distanceBetween(latitude,longitude,p.getLatitude(),p.getLongitude(),result);
-
-
-                        if(result[0] < distance){
-                            parkingSpaceList.add(p);
-                        }
-                         */
 
                         Location newlocation = new Location("");
                         newlocation.setLatitude(p.getLatitude());
@@ -335,6 +262,7 @@ public class ParkingsFragment extends Fragment {
                         float result = actualLocation.distanceTo(newlocation);
 
                         if(result < distance){
+                            Log.i("ParkingActivity","plaza introducida");
                             parkingSpaceList.add(p);
                         }
                     }
@@ -345,6 +273,7 @@ public class ParkingsFragment extends Fragment {
             }
         });
         swipeRefreshLayout.setRefreshing(false);
-
     }
+
+
 }

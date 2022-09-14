@@ -32,6 +32,9 @@ import android.widget.Toast;
 import com.example.parkingalert.ui.main.SectionsPagerAdapter;
 import com.example.parkingalert.databinding.ActivityAllParkingsBinding;
 
+/**
+ * Actividad principal al hacer login como usuario, en la que se muestra toda la informacion principal de la aplicacion.
+ */
 public class AllParkingsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private ActivityAllParkingsBinding binding;
@@ -51,8 +54,7 @@ public class AllParkingsActivity extends AppCompatActivity implements Navigation
         getSupportActionBar().setTitle("parkingAlert");
 
         drawerLayout = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -60,7 +62,6 @@ public class AllParkingsActivity extends AppCompatActivity implements Navigation
         navigationView.setNavigationItemSelectedListener(this);
 
         LocationPermission();
-        isGPSEnabled();
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = binding.viewPager;
@@ -69,6 +70,7 @@ public class AllParkingsActivity extends AppCompatActivity implements Navigation
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = binding.fab;
 
+        //boton de "+"
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,9 +89,6 @@ public class AllParkingsActivity extends AppCompatActivity implements Navigation
                     }
                 }
 
-
-
-
             }
         });
 
@@ -97,6 +96,10 @@ public class AllParkingsActivity extends AppCompatActivity implements Navigation
     }
 
 
+    /**
+     * Funcion para comprobar y solicitar si la ubicacion del dispositivo esta habilitada
+     * @return devuelve true si esta activado o false en caso contrario
+     */
     private boolean isGPSEnabled(){
         final LocationManager m = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if(!m.isProviderEnabled(LocationManager.GPS_PROVIDER)){
@@ -108,7 +111,7 @@ public class AllParkingsActivity extends AppCompatActivity implements Navigation
                             startActivity(in);
                         }
                     })
-                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("cancelar", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             dialogInterface.dismiss();
@@ -122,19 +125,22 @@ public class AllParkingsActivity extends AppCompatActivity implements Navigation
             return true;
         }
         return false;
-
     }
 
+
+    /**
+     * Funcion para solicitar los permisos en caso de que el usuario todavia no los hubiera aceptado
+     */
     private void LocationPermission(){
         if(ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_FINE_LOCATION)){
             new AlertDialog.Builder(this).setTitle("permiso necesario").setMessage("es necesario aceptar el permiso de localización")
-                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("aceptar", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             ActivityCompat.requestPermissions(AllParkingsActivity.this,new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, permissionAccepted);
                         }
                     })
-                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("cancelar", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             dialogInterface.dismiss();
@@ -147,6 +153,12 @@ public class AllParkingsActivity extends AppCompatActivity implements Navigation
         }
     }
 
+
+    /**
+     * Funcion para obtener el item seleccionado del menu lateral y manejar la logica segun esa opcion seleccionada
+     * @param item item seleccionado
+     * @return
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -167,6 +179,10 @@ public class AllParkingsActivity extends AppCompatActivity implements Navigation
         return true;
     }
 
+
+    /**
+     * Funcion para el control del boton de hacia atras en el dispositivo movil
+     */
     @Override
     public void onBackPressed() {
         if(drawerLayout.isDrawerOpen(GravityCompat.START)){

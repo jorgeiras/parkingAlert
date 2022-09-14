@@ -21,6 +21,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * actividad usada como pantalla de inicio para logearse o regsitrarse
+ */
 public class LoginActivity extends AppCompatActivity {
 
 
@@ -28,10 +32,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText EditTextpassword;
     private Button ButtonLogin;
     private Button ButtonRegistrarse;
-
     private String email;
     private String password;
-
     FirebaseAuth firebase;
 
 
@@ -53,13 +55,13 @@ public class LoginActivity extends AppCompatActivity {
 
         firebase = FirebaseAuth.getInstance();
 
+        //Boton de login
         ButtonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 email = EditTextemail.getText().toString();
                 password = EditTextpassword.getText().toString();
-
 
                 if(!email.isEmpty() && !password.isEmpty()){
                         login();
@@ -70,21 +72,21 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-        Log.i("mensaje", "registrarse pulsado");
 
-        /*TODO ver si hace falta finish o no de la activity*/
+        //Boton de registrar un nuevo usuario
         ButtonRegistrarse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                Log.i("mensaje", "registrarse pulsado1");
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
             }
         });
 
     }
 
-/*TODO PONER LOGO Y TEXTO DE INICIAR SESION*/
-/*TODO VER SI ES NECESARIO PONER EN UNA VARIABLE EL USUARIO LOGEADO*/
+
+    /**
+     *  Función login para acceder como usuario a la aplicación
+     */
     public void login(){
         firebase.signInWithEmailAndPassword(email.trim(), password.trim()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override

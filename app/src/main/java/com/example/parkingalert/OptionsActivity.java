@@ -31,7 +31,7 @@ public class OptionsActivity extends AppCompatActivity {
 
         sharedPreferences = getApplicationContext().getSharedPreferences("options", Context.MODE_PRIVATE);
         String measure = sharedPreferences.getString("measure","m");
-        int distance = sharedPreferences.getInt("distance",500);
+        int distance = sharedPreferences.getInt("distance",50);
 
         editText = findViewById(R.id.editTextOptions);
         editText.setText(String.valueOf(distance));

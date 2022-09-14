@@ -38,9 +38,7 @@ public class CameraFragment extends Fragment {
 
     private ImageView imageViewCameraPicture;
     private Button buttonOpenCamera;
-    //private static Bitmap bitmapPhoto;
     private static String stringEncodeBitmap;
-    private Uri filepath;
     ActivityResultLauncher<Intent> mGetContent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
@@ -49,7 +47,6 @@ public class CameraFragment extends Fragment {
                 Bundle bundle = result.getData().getExtras();
                 Bitmap bitmap = (Bitmap) bundle.get("data");
                 imageViewCameraPicture.setImageBitmap(bitmap);
-                //bitmapPhoto = bitmap;
                 encodeBitmap(bitmap);
             }
         }
@@ -94,27 +91,13 @@ public class CameraFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
 
         }
-        //imageViewCameraPicture = getView().findViewById(R.id.cameraPicture);
-        //buttonOpenCamera = getView().findViewById(R.id.openCamera);
 
-        /*
-        buttonOpenCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mGetContent.launch(new Intent(MediaStore.ACTION_IMAGE_CAPTURE));
-
-            }
-        });
-*/
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
-        //LinearLayout layout = (LinearLayout) inflater.inflate(R.layout.fragment_camera, container, false);
 
         stringEncodeBitmap = null;
         return inflater.inflate(R.layout.fragment_camera, container, false);

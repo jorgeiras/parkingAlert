@@ -24,6 +24,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * actividad usada como pantalla de registro de un nuevo usuario
+ */
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText EditTextname;
@@ -36,7 +40,6 @@ public class RegisterActivity extends AppCompatActivity {
     private String password;
 
     FirebaseAuth firebase;
-    //DatabaseReference db;
     FirebaseFirestore db;
 
 
@@ -55,7 +58,6 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         firebase = FirebaseAuth.getInstance();
-        //db = FirebaseDatabase.getInstance().getReference();
         db = FirebaseFirestore.getInstance();
 
         Buttonregistrarse.setOnClickListener(new View.OnClickListener() {
@@ -84,9 +86,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-//TODO integrar la base de datos real time
-    //TODO controlar los fallos por usuario ya creado devolviendo un mensaje de error
 
+
+    /**
+     * función para registrar un nuevo usuario
+     */
     public void register(){
         firebase.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -94,7 +98,6 @@ public class RegisterActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
                     String User = firebase.getUid();
                     Map<String,Object> UserDataRegister = new HashMap<>();
-                    //UserDataRegister.put("UserID", User);
                     UserDataRegister.put("name", name);
                     UserDataRegister.put("email", email);
                     UserDataRegister.put("score", 0);
@@ -114,34 +117,6 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     });
 
-/*
-                    db.collection("users").add(UserDataRegister).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Toast.makeText(RegisterActivity.this, "Exito al registrar usuario", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(RegisterActivity.this, AllParkingsActivity.class));
-                            finish();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(RegisterActivity.this, "Error al intentar conectar con la base de datos", Toast.LENGTH_LONG).show();
-                        }
-                    });*/
-                    /*
-                    db.child("Users").child(User).setValue(UserDataRegister).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task2) {
-                            if(task2.isSuccessful()){
-                                startActivity(new Intent(RegisterActivity.this, AllParkingsActivity.class));
-                                finish();
-                            }
-                            else{
-                                Toast.makeText(RegisterActivity.this, "Error al intentar conectar con la base de datos", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });*/
-
                 }
                 else{
                     Toast.makeText(RegisterActivity.this,"El usuario ya existe", Toast.LENGTH_LONG).show();
@@ -149,4 +124,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

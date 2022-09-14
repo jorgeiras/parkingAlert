@@ -61,35 +61,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         public void onMapReady(GoogleMap googleMap) {
 
             if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return;
             }
             googleMap.setMyLocationEnabled(true);
-
             googleMap.getUiSettings().setMapToolbarEnabled(false);
 
 
-
             map = googleMap;
-
             getDeviceLocation();
 
-            //MapsInitializer.initialize(getContext());
-
-            /*
-            map = googleMap;
-
-            googleMap.addMarker(new MarkerOptions().position(new LatLng(40.43214,-74.090709)).title("statuee").snippet("holaaa"));
-            CameraPosition cam = CameraPosition.builder().target(new LatLng(40.43214,-74.090709)).zoom(16).bearing(0).tilt(45).build();
-            googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cam));
-
-            */
 
         }
 
@@ -120,10 +100,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
 
     private void getDeviceLocation() {
-        /*
-         * Get the best and most recent location of the device, which may be null in rare
-         * cases when a location is not available.
-         */
+
         try {
 
                 Task<Location> locationResult = fusedLoc.getLastLocation();
@@ -158,20 +135,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     public static double getLat(){
         return latitude;
     }
-/*
-    private void getCurrentLocation(){
-        locClient.getLastLocation().addOnCompleteListener(task->{
 
-            if(task.isSuccesful()){
-                Location loc = task.getResult();
-                goLocation(loc.getLatitude(),loc.getLongitude());
-            }
-        })
-    }
-
-    private void goLocation(double latitude, double longitude) {
-
-    }
-*/
 
 }
