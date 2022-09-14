@@ -96,24 +96,7 @@ public class UserRankingFragment extends Fragment {
 
             @Override
             public void onRefresh() {
-                recyclerView.setAdapter(userInfoAdapter);
-                userInfoList.clear();
-                db.collection("users").orderBy("score", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for(QueryDocumentSnapshot document : task.getResult()){
-                                UserInfo us = document.toObject(UserInfo.class);
-                                userInfoList.add(us);
-                            }
-                            userInfoAdapter.notifyDataSetChanged();
-                        }else{
-                            Toast.makeText(getActivity(), "error" + task.getException(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                swipeRefreshLayout.setRefreshing(false);
-
+                filterUserRanking();
             }
         });
 
@@ -125,6 +108,11 @@ public class UserRankingFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        filterUserRanking();
+    }
+
+
+    private void filterUserRanking(){
         recyclerView.setAdapter(userInfoAdapter);
         userInfoList.clear();
         db.collection("users").orderBy("score", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -142,5 +130,8 @@ public class UserRankingFragment extends Fragment {
             }
         });
         swipeRefreshLayout.setRefreshing(false);
+
     }
+
+
 }
