@@ -1,9 +1,9 @@
 # ParkingAlert
 La aplicación ParkingAlert se trata de el Trabajo de Fin de Grado (TFG) de Jorge Alonso Urrutia.  
 Una aplicación desarrollada para moviles con sistema operativo Android desde Android 8.0.  
-![alt text](https://raw.githubusercontent.com/jorgeiras/parkingAlert/master/parkingAlert/img/logo.PNG)
 
-## Descripción
+## Descripción![logo](https://user-images.githubusercontent.com/56297403/190227780-96a5662e-de40-4579-8404-6d3b8ffae0fa.PNG)
+
 La aplicación ParkingAlert nace de intentar dar una solución al problema de escasez de plazas en ciudades con gran afluencia de coches como Madrid,  
 donde sus habitantes pueden pasar largos ratos circulando su zona solo para encontrar una plaza de aparcamiento libre.  
 Para ello la aplicación consiste en un sistema donde los usuarios son a su vez productores y consumidores de las plazas libres que encuentran,  
