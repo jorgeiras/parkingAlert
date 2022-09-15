@@ -24,10 +24,8 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.provider.Settings;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.parkingalert.ui.main.SectionsPagerAdapter;
 import com.example.parkingalert.databinding.ActivityAllParkingsBinding;
