@@ -14,3 +14,10 @@ siendo estos los que al estar caminando por la calle y encuentren una plaza libr
 o si por el contrario estan conduciendo y buscando una plaza libre para aparcar, se podrán aprovechar de las plazas libres que han publicado otros usuarios  
 para llegar hasta ellas.
 
+## Demo  
+Para ver el funcionamiento de la aplicación se puede acceder a la demo a traves del enlace de youtube https://youtu.be/tGXq6NA2dW0  
+
+
+
+https://user-images.githubusercontent.com/56297403/190491825-762746ad-ca13-417b-b0e3-7f3052ff2967.mp4
+
