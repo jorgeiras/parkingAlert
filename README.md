@@ -5,7 +5,6 @@ Una aplicación desarrollada para moviles con sistema operativo Android desde An
  <img src="https://user-images.githubusercontent.com/56297403/190228286-78c4b174-28f7-44f0-87ff-76c24534fb6c.PNG">
 </p>
 
-  ![logo sin letras](https://user-images.githubusercontent.com/56297403/190228286-78c4b174-28f7-44f0-87ff-76c24534fb6c.PNG)
 
 ## Descripción  
 La aplicación ParkingAlert nace de intentar dar una solución al problema de escasez de plazas en ciudades con gran afluencia de coches como Madrid,  
