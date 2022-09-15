@@ -22,5 +22,3 @@ Para ver el funcionamiento de la aplicación se puede acceder a la demo a traves
 
 
 
-https://user-images.githubusercontent.com/56297403/190492894-064c6bb8-228b-4feb-9f0c-b52a238b251d.mp4
-
