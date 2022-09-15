@@ -23,7 +23,7 @@ import java.util.Map;
 
 
 /**
- * actividad usada como pantalla de inicio para logearse o regsitrarse
+ * Actividad usada como pantalla de inicio para logearse o regsitrarse
  */
 public class LoginActivity extends AppCompatActivity {
 

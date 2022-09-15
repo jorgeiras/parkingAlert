@@ -44,10 +44,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ParkingsFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Fragmento para mostrar las plazas de parking
  */
 public class ParkingsFragment extends Fragment {
 
@@ -62,12 +61,9 @@ public class ParkingsFragment extends Fragment {
     LocationRequest locationRequest;
     int counter =0;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -75,15 +71,8 @@ public class ParkingsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ParkingsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
+
     public static ParkingsFragment newInstance(String param1, String param2) {
         ParkingsFragment fragment = new ParkingsFragment();
         Bundle args = new Bundle();
@@ -106,7 +95,6 @@ public class ParkingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
         View v = inflater.inflate(R.layout.fragment_recent_parkings, container, false);
 
@@ -123,7 +111,7 @@ public class ParkingsFragment extends Fragment {
 
 
 
-
+        //refrescar pantalla
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -137,6 +125,9 @@ public class ParkingsFragment extends Fragment {
     }
 
 
+    /**
+     * Funcion para obtener la ubicacion actual
+     */
     @RequiresApi(api = Build.VERSION_CODES.S)
     private void getDeviceLocation() {
 
@@ -176,13 +167,6 @@ public class ParkingsFragment extends Fragment {
         });
 
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         LocationServices.getFusedLocationProviderClient(getActivity()).requestLocationUpdates(locationRequest, new LocationCallback() {
@@ -195,7 +179,6 @@ public class ParkingsFragment extends Fragment {
                     latitude = locationResult.getLocations().get(locationResult.getLocations().size()-1).getLatitude();
                     longitude = locationResult.getLocations().get(locationResult.getLocations().size()-1).getLongitude();
                     if(counter <0 && latitude!=0.0 && longitude != 0.0){
-                        Log.i("ParkingActivity","CONTADOR 2");
                         filterParkings();
                         counter++;
                     }
@@ -226,8 +209,9 @@ public class ParkingsFragment extends Fragment {
     }
 
 
-
-
+    /**
+     * Funcion para filtrar las plazas de parking segun el radio de busqueda
+     */
     @RequiresApi(api = Build.VERSION_CODES.S)
     private void filterParkings(){
         Log.i("ParkingActivity","COMENZANDO FILTRO");

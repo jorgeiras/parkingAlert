@@ -26,7 +26,7 @@ import java.util.Map;
 
 
 /**
- * actividad usada como pantalla de registro de un nuevo usuario
+ * Actividad usada como pantalla de registro de un nuevo usuario
  */
 public class RegisterActivity extends AppCompatActivity {
 

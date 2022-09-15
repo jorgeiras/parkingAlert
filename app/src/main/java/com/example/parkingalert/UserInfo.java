@@ -1,5 +1,8 @@
 package com.example.parkingalert;
 
+/**
+ * Clase encargada de encapsular y manejar la informacion de un usuario
+ */
 public class UserInfo {
 
     private  String name;

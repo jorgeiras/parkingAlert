@@ -28,6 +28,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Actividad encargada de mostrar los datos de una plaza en concreto
+ */
 public class ParkingItemActivity extends AppCompatActivity {
 
     private ImageView imageView;
@@ -118,6 +121,7 @@ public class ParkingItemActivity extends AppCompatActivity {
             buttonPayParking.setText("Ocupar plaza");
         }
 
+        //Boton de pagar/ocupar plaza
         buttonPayParking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,7 +144,7 @@ public class ParkingItemActivity extends AppCompatActivity {
 
 
 
-
+        //Boton de plaza ocupada
         buttonParkingBusy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -152,7 +156,11 @@ public class ParkingItemActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * Funcion para decodificar la imagen y convertirla a un objeto BitMap
+     * @param s String con los datos codificados de la imagen
+     * @return Bitmap de la imagen
+     */
     private Bitmap decodeImage(String s){
         byte[] decodeStringBytes = android.util.Base64.decode(s, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(decodeStringBytes,0,decodeStringBytes.length);

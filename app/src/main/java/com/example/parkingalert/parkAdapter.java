@@ -22,6 +22,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Clase adaptador para el RecyclerView de la pestaña de Parkings
+ */
 public class parkAdapter extends RecyclerView.Adapter<parkAdapter.ParkViewHolder> {
 
     Context context;
@@ -69,13 +72,14 @@ public class parkAdapter extends RecyclerView.Adapter<parkAdapter.ParkViewHolder
     }
 
 
-
+    /**
+     * Clase que rellena cada uno de los items del RecyclerView de plazas
+     */
     class ParkViewHolder extends RecyclerView.ViewHolder{
 
         TextView streetAddress;
         TextView cityAddress;
         TextView timeStamp;
-        TextView User;
         TextView paymentArea;
         ImageView imageParking;
 
@@ -121,12 +125,22 @@ public class parkAdapter extends RecyclerView.Adapter<parkAdapter.ParkViewHolder
     }
 
 
-
+    /**
+     * Funcion para decodificar la imagen y convertirla a un objeto BitMap
+     * @param s String con los datos codificados de la imagen
+     * @return Bitmap de la imagen
+     */
     private Bitmap decodeImage(String s){
         byte[] decodeStringBytes = android.util.Base64.decode(s, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(decodeStringBytes,0,decodeStringBytes.length);
     }
 
+    /**
+     * Función para obtener la direccion de la plaza
+     * @param parkingSpace Objeto con la informacion de la plaza
+     * @return array de String con la direccion de la calle y ciudad
+     * @throws IOException
+     */
     private String[] getCityAddress(ParkingSpace parkingSpace) throws IOException {
         Geocoder geocoder;
         List<Address> addresses;

@@ -36,6 +36,10 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * Actividad encargada de llevar el proceso de anyadir una plaza nueva
+ */
 public class AddParkingActivity extends AppCompatActivity {
 
     private Button buttonAccept;
@@ -74,7 +78,7 @@ public class AddParkingActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
 
-
+        //Boton de aceptar
         buttonAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,7 +96,7 @@ public class AddParkingActivity extends AppCompatActivity {
             }
         });
 
-
+        //Boton de confirmar
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,14 +131,15 @@ public class AddParkingActivity extends AppCompatActivity {
                     Toast.makeText(AddParkingActivity.this,"haga una foto de la plaza",Toast.LENGTH_LONG).show();
                 }
 
-                /*TODO guardar en firebase y volver a la actividad de all parkings*/
             }
         });
-
-
-
     }
 
+
+    /**
+     * Funcion para comprobar si se ha seleccionado alguna de las opciones del RadioGroup
+     * @return true en caso de haberse seleccionado alguna opcion y false en caso contrario
+     */
     private boolean checkRadioGroup() {
         if(radioGroup.getCheckedRadioButtonId()==-1){
             return false;
@@ -142,6 +147,11 @@ public class AddParkingActivity extends AppCompatActivity {
         return true;
     }
 
+
+    /**
+     * Funcion que devuelve la opcion del RadioGroup seleccionada
+     * @return true si la opcion seleccionada es si es de pago y false en caso contrario
+     */
     private boolean getSelectedRadioButton(){
         int radioButtonID = radioGroup.getCheckedRadioButtonId();
         View radioButton = radioGroup.findViewById(radioButtonID);

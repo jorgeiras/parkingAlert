@@ -29,9 +29,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import java.io.ByteArrayOutputStream;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link CameraFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Fragmento encargado de recoger la foto tomada por la camara
  */
 public class CameraFragment extends Fragment {
 
@@ -52,12 +50,9 @@ public class CameraFragment extends Fragment {
         }
     });
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -65,15 +60,7 @@ public class CameraFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CameraFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static CameraFragment newInstance(String param1, String param2) {
         CameraFragment fragment = new CameraFragment();
         Bundle args = new Bundle();
@@ -123,12 +110,21 @@ public class CameraFragment extends Fragment {
 
     }
 
+    /**
+     * Funcion encargada de codificar en BASE64 la foto tomada
+     * @param bitmap Foto en objeto Bitmap
+     */
     private void encodeBitmap(Bitmap bitmap){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         stringEncodeBitmap = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
     }
 
+
+    /**
+     * Funcion encargada de devolver el objeto Bitmap de la foto
+     * @return
+     */
     public static String getBitmapPhoto(){
         return stringEncodeBitmap;
     }

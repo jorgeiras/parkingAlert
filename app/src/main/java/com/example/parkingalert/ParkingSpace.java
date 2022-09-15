@@ -1,5 +1,8 @@
 package com.example.parkingalert;
 
+/**
+ * Clase encargada de encapsular y manejar la informacion de una plaza
+ */
 public class ParkingSpace {
 
     private String UserID;
@@ -23,6 +26,7 @@ public class ParkingSpace {
         this.paymentArea = paymentArea;
     }
 
+
     public String getUserID() {
         return UserID;
     }
@@ -30,6 +34,7 @@ public class ParkingSpace {
     public void setUserID(String userID) {
         UserID = userID;
     }
+
 
     public String getEncodedBitmapPhoto() {
         return encodedBitmapPhoto;

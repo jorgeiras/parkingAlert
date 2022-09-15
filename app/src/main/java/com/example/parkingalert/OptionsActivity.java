@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+/**
+ * Actividad para la opción de cambio de distancia del radio de busqueda
+ */
 public class OptionsActivity extends AppCompatActivity {
 
     EditText editText;
@@ -46,7 +49,7 @@ public class OptionsActivity extends AppCompatActivity {
         }
         dropdown.setSelection(position);
 
-
+        //Boton aceptar
         buttonAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

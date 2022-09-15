@@ -33,6 +33,9 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Actividad para seleccionar el tiempo de ticket y activar la pasarela de pago
+ */
 public class StripeCheckOutActivity extends AppCompatActivity {
 
     private PaymentSheet paymentSheet;
@@ -82,7 +85,7 @@ public class StripeCheckOutActivity extends AppCompatActivity {
             }
         });
 
-
+        //Boton pagar
         buttonPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,6 +126,9 @@ public class StripeCheckOutActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Funcion para obtener el id de usuario de la pasarela Stripe para realizar una transaccion
+     */
     private void getCustomerData(){
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://api.stripe.com/v1/customers", new Response.Listener<String>() {
@@ -158,8 +164,10 @@ public class StripeCheckOutActivity extends AppCompatActivity {
     }
 
 
-
-
+    /**
+     * Funcion para obtener una clave efimera de la pasarela Stripe para realizar una transaccion
+     * @param customer id de usuario de la pasarela Stripe
+     */
     private void getEphemeralKey(String customer) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://api.stripe.com/v1/ephemeral_keys", new Response.Listener<String>() {
@@ -203,9 +211,11 @@ public class StripeCheckOutActivity extends AppCompatActivity {
     }
 
 
-
-
-
+    /**
+     * Funcion para obtener la clave secreto de cliente de la pasarela Stripe para realizar una transaccion
+     * @param ephemeralKey clave efimera de la transaccion
+     * @param customer id de usuario de la transaccion
+     */
     private void getClient(String ephemeralKey, String customer) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://api.stripe.com/v1/payment_intents", new Response.Listener<String>() {
@@ -254,6 +264,10 @@ public class StripeCheckOutActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
+    /**
+     * Funcion para comprobar que el pago se ha realizado correctamente y llamar a la funcion de actualizar puntuacion
+     * @param paymentSheetResult
+     */
     private void paymentResult(PaymentSheetResult paymentSheetResult) {
         if(paymentSheetResult instanceof PaymentSheetResult.Completed){
             Toast.makeText(this,"pago completado", Toast.LENGTH_LONG).show();
@@ -261,11 +275,16 @@ public class StripeCheckOutActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Funcion que ejecuta el comienzo de la pasarela para que el usuario pueda introducir sus datos bancarios
+     */
     private void execPayment(){
         paymentSheet.presentWithPaymentIntent(clientSecret, new PaymentSheet.Configuration("ParkingAlert",new PaymentSheet.CustomerConfiguration(customerID,ephemeralKey)));
     }
 
-
+    /**
+     * Funcion que actualiza la puntuacion del usuario de la plaza
+     */
     private void updateUserScore(){
        db.collection("users").document(i.getStringExtra("UserID")).update("score",score + 1);
        db.collection("Parkings").document(i.getStringExtra("docID")).delete();

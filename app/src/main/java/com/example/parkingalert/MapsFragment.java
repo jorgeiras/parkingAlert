@@ -34,6 +34,9 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.concurrent.Executor;
 
+/**
+ * Fragmento que crea una mapa de Google Maps para la actividad AddParkingActivity
+ */
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     GoogleMap map;
@@ -48,15 +51,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
-    /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
+
         @Override
         public void onMapReady(GoogleMap googleMap) {
 
@@ -97,8 +92,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-
-
+    /**
+     * Funcion para obtener la ubicacion actual del telefono
+     */
     private void getDeviceLocation() {
 
         try {
@@ -128,10 +124,19 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
+    /**
+     * Funcion para obtener la coordenada longitud
+     * @return coordenada longitud
+     */
     public static double getLong(){
             return longitude;
     }
 
+
+    /**
+     * Funcion para obtener la coordenada latitud
+     * @return coordenada latitud
+     */
     public static double getLat(){
         return latitude;
     }

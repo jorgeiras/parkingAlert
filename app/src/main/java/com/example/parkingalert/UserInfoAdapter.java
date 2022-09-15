@@ -14,6 +14,9 @@ import com.google.firebase.firestore.auth.User;
 
 import java.util.List;
 
+/**
+ * Clase adaptador para el RecyclerView de la pestaña de Ranking de usuarios
+ */
 public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.UserInfoViewHolder> {
 
     Context context;
@@ -45,7 +48,9 @@ public class UserInfoAdapter extends RecyclerView.Adapter<UserInfoAdapter.UserIn
         return list.size();
     }
 
-
+    /**
+     * Clase que rellena cada uno de los items del RecyclerView de usuarios
+     */
     class UserInfoViewHolder extends RecyclerView.ViewHolder{
 
         TextView rankingPosition;
